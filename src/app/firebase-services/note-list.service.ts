@@ -52,9 +52,6 @@ export class NoteListService {
     });
   }
 
-
-
-
   setNoteObject(obj: any, id: string): Note {
     return {
       id: id || "",
