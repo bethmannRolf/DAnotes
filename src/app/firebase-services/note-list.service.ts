@@ -17,29 +17,47 @@ export class NoteListService {
 
 
 
-  // items$;
+  items$;
+  items;
   firestore = inject(Firestore);
 
   constructor() {
 
     this.unsubList = onSnapshot(this.getnotesRef(), (list) => {
       list.forEach(element => {
-        console.log(element)
+        console.log( this.setNoteObject (element.data() , element.id))
       })
     });
 
 
-    this.unsubList();
+    // this.unsubList();
+
+    this.items$ = collectionData(this.getnotesRef());
+    this.items = this.items$.subscribe((list) => {
+      list.forEach(element => {
+        console.log('2', element)
+      })
+    })
 
 
-
-
-
-
-    // this.items$ = collectionData(this.getnotesRef());
 
   }
 
+
+  ngonDestroy() {
+    this.items.unsubscribe()
+  }
+
+
+  setNoteObject(obj: any, id: string): Note {
+    return {
+      id: id || "",
+      type: obj.type || "note",
+      title: obj.title || "",
+      content: obj.content || "",
+      marked: obj.marked || false,
+    }
+  }
 
   getnotesRef() {
     return collection(this.firestore, 'notes')
