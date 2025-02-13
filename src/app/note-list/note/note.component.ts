@@ -48,15 +48,15 @@ export class NoteComponent {
     }
   }
 
-  // moveToNotes() {
-  //   if (this.note.id) {
-  //     this.note.type = 'notes';
-  //     let docId = this.note.id
-  //     delete this.note.id;
-  //     this.noteService.addNote(this.note, "trash")
-  //     this.noteService.deleteNote("notes", docId)
-  //   }
-  // }
+  moveToNotes() {
+    if (this.note.id) {
+      this.note.type = 'note';
+      let docId = this.note.id
+      this.noteService.addNote(this.note, "notes")
+      this.noteService.deleteNote("trash", docId)
+   
+    }
+  }
 
   deleteNote() {
     if (this.note.id) {

@@ -66,16 +66,11 @@ return {
   }
 
 
-
-  async addNote(item: Note, collid: "notes" | "trash") {
+  async addNote(item: Note, collId: "notes" | "trash" = "notes") {
     try {
-      let collectionRef;
-      
-      if (collid === "notes") {
-        collectionRef = this.getNotesRef(); // Annahme: Diese Methode gibt die Referenz für "notes" zurück
-      } else {
-        collectionRef = collection(this.firestore, "trash");
-      }
+      const collectionRef = collId === "notes" 
+        ? this.getNotesRef() 
+        : collection(this.firestore, "trash");
   
       const docRef = await addDoc(collectionRef, item);
       console.log("Document written with ID: ", docRef.id);
@@ -88,6 +83,19 @@ return {
 
 
 
+  // async addNote(item: Note, collId: "notes" | "trash") {
+  //   try {
+  //     const collectionRef = collId === "notes" 
+  //       ? this.getNotesRef() 
+  //       : collection(this.firestore, "trash");
+  
+  //     const docRef = await addDoc(collectionRef, item);
+  //     console.log("Document written with ID: ", docRef.id);
+  //   } catch (error) {
+  //     console.error("Error adding note:", error);
+  //   }
+  // }
+  
 
   // async addNote(item: Note) {
   //   await addDoc(this.getNotesRef(), item).catch(
