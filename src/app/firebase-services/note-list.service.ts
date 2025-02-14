@@ -96,7 +96,7 @@ return {
   }
 
   subNotesList() {
-    const q = query(this.getNotesRef(), where("state", "==", "CA"), limit(100));
+    const q = query(this.getNotesRef(), limit(100));
 
     return onSnapshot(q, (list) => {
       this.normalNotes = []
