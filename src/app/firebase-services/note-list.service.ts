@@ -10,11 +10,13 @@ export class NoteListService {
 
   trashNotes: Note[] = [];
   normalNotes: Note[] = [];
+  normalMarkedNotes: Note[] = [];
 
 
 
   unsubTrash;
   unsubNotes;
+  unsubMarkedNotes;
 
 
 
@@ -23,6 +25,7 @@ export class NoteListService {
   constructor() {
 
     this.unsubTrash = this.subTrashList()
+    this.unsubMarkedNotes = this.subMarkedNotesList()
     this.unsubNotes = this.subNotesList()
   }
 
@@ -83,6 +86,7 @@ return {
   ngonDestroy() {
     this.unsubTrash();
     this.unsubNotes();
+    this.unsubMarkedNotes();
 
   }
 
@@ -96,7 +100,7 @@ return {
   }
 
   subNotesList() {
-    const q = query(this.getNotesRef(), limit(100));
+    const q = query(this.getNotesRef() ,  limit(100));
 
     return onSnapshot(q, (list) => {
       this.normalNotes = []
@@ -105,6 +109,20 @@ return {
       })
     });
   }
+
+  subMarkedNotesList() {
+    const q = query(this.getNotesRef(), where("marked", "==", true) ,  limit(100));
+
+    return onSnapshot(q, (list) => {
+      this.normalMarkedNotes = []
+      list.forEach(element => {
+        this.normalMarkedNotes.push(this.setNoteObject(element.data(), element.id))
+      })
+    });
+  }
+
+
+
 
   setNoteObject(obj: any, id: string): Note {
     return {
