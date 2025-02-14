@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Note } from '../interfaces/note.interface';
-import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import {query, orderBy, where, limit, Firestore, collection, doc, collectionData, onSnapshot, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -34,7 +34,7 @@ await deleteDoc( this.getSingleDocRef(collId, docId)).catch(
 
 }
   async updateNote(note: Note) {
-    // Set the "capital" field of the city 'DC'
+ 
     if (note.id) {
       let docRef = this.getSingleDocRef(this.getColIdFromNote(note), note.id)
       await updateDoc(docRef, this.getCleanJson(note)).catch(
@@ -80,32 +80,6 @@ return {
   }
   
 
-
-
-
-  // async addNote(item: Note, collId: "notes" | "trash") {
-  //   try {
-  //     const collectionRef = collId === "notes" 
-  //       ? this.getNotesRef() 
-  //       : collection(this.firestore, "trash");
-  
-  //     const docRef = await addDoc(collectionRef, item);
-  //     console.log("Document written with ID: ", docRef.id);
-  //   } catch (error) {
-  //     console.error("Error adding note:", error);
-  //   }
-  // }
-  
-
-  // async addNote(item: Note) {
-  //   await addDoc(this.getNotesRef(), item).catch(
-  //     (err) => { console.error(err) }
-  //   ).then((docRef) => {
-  //     console.log("Document written with ID: ", docRef?.id);
-  //   })
-  // }
-
-
   ngonDestroy() {
     this.unsubTrash();
     this.unsubNotes();
@@ -122,7 +96,9 @@ return {
   }
 
   subNotesList() {
-    return onSnapshot(this.getNotesRef(), (list) => {
+    const q = query(this.getNotesRef(), where("state", "==", "CA"), limit(100));
+
+    return onSnapshot(q, (list) => {
       this.normalNotes = []
       list.forEach(element => {
         this.normalNotes.push(this.setNoteObject(element.data(), element.id))
