@@ -43,7 +43,6 @@ await deleteDoc( this.getSingleDocRef(collId, docId)).catch(
       await updateDoc(docRef, this.getCleanJson(note)).catch(
         (err) => { console.log(err) }
       );
-
     }
   }
 
@@ -57,8 +56,6 @@ return {
 }
 }
 
-
-
   getColIdFromNote(note: Note) {
     if (note.type == 'note') {
       return 'notes'
@@ -67,7 +64,6 @@ return {
       return 'trash'
     }
   }
-
 
   async addNote(item: Note, collId: "notes" | "trash" = "notes") {
     try {
@@ -82,7 +78,6 @@ return {
     }
   }
   
-
   ngonDestroy() {
     this.unsubTrash();
     this.unsubNotes();
@@ -121,9 +116,6 @@ return {
     });
   }
 
-
-
-
   setNoteObject(obj: any, id: string): Note {
     return {
       id: id || "",
@@ -145,6 +137,4 @@ return {
   getSingleDocRef(collId: string, docId: string) {
     return doc(collection(this.firestore, collId), docId)
   }
-
-
 }
